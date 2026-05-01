@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1714567890123,
+    "arrival": "2026-06-01",
+    "departure": "2026-06-15",
+    "country": "France",
+    "city": "Paris"
+  },
+  {
+    "id": 1715123456789,
+    "arrival": "2026-07-10",
+    "departure": "2026-07-20",
+    "country": "Spain",
+    "city": "Barcelona"
+  },
+  {
+    "id": 1716234567890,
+    "arrival": "2026-08-05",
+    "departure": "2026-08-12",
+    "country": "Italy",
+    "city": "Rome"
+  }
+]

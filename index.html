@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schengen Area Calculator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #12bbd4 0%, #9ec7fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #9ec7fc;
+        }
+
+        .card {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(18, 187, 212, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            background: rgba(42, 42, 62, 0.6);
+            border: 1px solid rgba(18, 187, 212, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #9ec7fc;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #12bbd4;
+        }
+
+        .stat.warning .stat-value {
+            color: #ff6b6b;
+        }
+
+        .stat.success .stat-value {
+            color: #51cf66;
+        }
+
+        .form-section h2 {
+            margin-bottom: 20px;
+            color: #9ec7fc;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: end;
+        }
+
+        .form-button-wrapper {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #9ec7fc;
+        }
+
+        input[type="date"],
+        input[type="text"] {
+            padding: 12px;
+            border: 1px solid rgba(13, 96, 248, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(42, 42, 62, 0.6);
+            color: #ccc;
+            font-family: inherit;
+        }
+
+        input[type="date"]:hover,
+        input[type="text"]:hover {
+            border-color: #12bbd4;
+            box-shadow: 0 2px 8px rgba(18, 187, 212, 0.2);
+        }
+
+        input[type="date"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #0d60f8;
+            box-shadow: 0 0 0 3px rgba(13, 96, 248, 0.2);
+            transform: translateY(-1px);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            filter: invert(0.7) sepia(1) saturate(3) hue-rotate(175deg);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            background: rgba(18, 187, 212, 0.2);
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0d60f8 0%, #12bbd4 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(13, 96, 248, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 96, 248, 0.6);
+        }
+
+        button.delete-btn {
+            background: rgba(255, 107, 107, 0.8);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        }
+
+        button.delete-btn:hover {
+            background: #ff5252;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+        }
+
+        .trips-section {
+        }
+
+        .trips-section h2 {
+            margin-bottom: 15px;
+            color: #9ec7fc;
+        }
+
+        .trip-list {
+            list-style: none;
+        }
+
+        .trip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(42, 42, 62, 0.4);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(18, 187, 212, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .trip-item:hover {
+            background: rgba(42, 42, 62, 0.6);
+            border-color: rgba(18, 187, 212, 0.4);
+        }
+
+        .trip-item.upcoming {
+            background: rgba(18, 187, 212, 0.15);
+            border-left: 4px solid #12bbd4;
+        }
+
+        .trip-item.upcoming:hover {
+            background: rgba(18, 187, 212, 0.25);
+        }
+
+        .trip-info {
+            flex-grow: 1;
+        }
+
+        .trip-dates {
+            font-weight: 600;
+            color: #9ec7fc;
+            margin-bottom: 4px;
+        }
+
+        .trip-country {
+            font-size: 0.95rem;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .trip-duration {
+            font-size: 0.9rem;
+            color: rgba(158, 199, 252, 0.7);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: rgba(158, 199, 252, 0.6);
+        }
+
+        .country-breakdown {
+            margin-top: 30px;
+        }
+
+        .country-breakdown h2 {
+            margin-bottom: 15px;
+            color: #9ec7fc;
+        }
+
+        .country-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .country-card {
+            background: rgba(42, 42, 62, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(13, 96, 248, 0.3);
+            border-left: 4px solid #0d60f8;
+            transition: all 0.3s ease;
+        }
+
+        .country-card:hover {
+            background: rgba(42, 42, 62, 0.6);
+            border-color: rgba(18, 187, 212, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .country-name {
+            font-weight: 600;
+            color: #12bbd4;
+            margin-bottom: 8px;
+        }
+
+        .country-detail {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .country-detail strong {
+            color: #9ec7fc;
+        }
+
+        .info-box {
+            background: rgba(18, 187, 212, 0.1);
+            border-left: 4px solid #12bbd4;
+            border: 1px solid rgba(18, 187, 212, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            color: #9ec7fc;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .country-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Authentication Styles */
+        #auth-screen {
+            max-width: 450px;
+            margin: 100px auto;
+        }
+
+        #auth-screen h2 {
+            color: #9ec7fc;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        #auth-screen input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(42, 42, 62, 0.6);
+            border: 1px solid rgba(18, 187, 212, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #auth-screen input:focus {
+            outline: none;
+            border-color: #12bbd4;
+            background: rgba(42, 42, 62, 0.8);
+        }
+
+        #auth-screen button {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        #auth-screen .auth-toggle {
+            text-align: center;
+            color: #ccc;
+            font-size: 0.95rem;
+            margin-top: 20px;
+        }
+
+        #auth-screen .auth-toggle a {
+            color: #12bbd4;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #auth-screen .auth-toggle a:hover {
+            color: #9ec7fc;
+        }
+
+        #auth-screen .auth-error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            text-align: center;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-top: 15px;
+            color: #9ec7fc;
+            font-size: 0.95rem;
+        }
+
+        .user-info strong {
+            color: #12bbd4;
+        }
+
+        .user-info button {
+            padding: 8px 20px;
+            margin-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Admin Styles */
+        #admin-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            margin-right: 10px;
+        }
+
+        #admin-btn:hover {
+            background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+        }
+
+        #users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #users-table th {
+            background: rgba(42, 42, 62, 0.8);
+            color: #9ec7fc;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #12bbd4;
+            font-weight: 600;
+        }
+
+        #users-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(18, 187, 212, 0.2);
+            color: #ccc;
+        }
+
+        #users-table tbody tr:hover {
+            background: rgba(42, 42, 62, 0.4);
+        }
+
+        .admin-badge {
+            background: #12bbd4;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .user-badge {
+            background: rgba(158, 199, 252, 0.2);
+            color: #9ec7fc;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ee5a6f;
+            transform: translateY(-2px);
+        }
+
+        .delete-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇪🇺 Schengen Area Calculator</h1>
+            <p>Track your 90/180 day limit with ease</p>
+            <div class="user-info hidden" id="user-info">
+                Logged in as: <strong id="current-user"></strong>
+                <button id="admin-btn" class="hidden" onclick="showAdminPage()">Admin</button>
+                <button onclick="auth.logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Authentication Screen -->
+        <div id="auth-screen" class="card">
+            <h2>Welcome Back</h2>
+            <div id="auth-error" class="auth-error hidden"></div>
+
+            <!-- Login Form -->
+            <div id="login-form">
+                <input type="text" id="login-username" placeholder="Username" autocomplete="username">
+                <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+                <button onclick="auth.login()">Login</button>
+                <div class="auth-toggle">
+                    Don't have an account? <a onclick="auth.showRegister()">Register</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="hidden">
+                <input type="text" id="reg-username" placeholder="Username (3-20 characters)" autocomplete="username">
+                <input type="password" id="reg-password" placeholder="Password (min 8 characters)" autocomplete="new-password">
+                <input type="password" id="reg-confirm" placeholder="Confirm Password" autocomplete="new-password">
+                <button onclick="auth.register()">Create Account</button>
+                <div class="auth-toggle">
+                    Already have an account? <a onclick="auth.showLogin()">Login</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Page (hidden, only for admins) -->
+        <div id="admin-page" class="hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: #9ec7fc; margin: 0;">User Administration</h2>
+                    <button onclick="showCalculator()" style="background: linear-gradient(135deg, #12bbd4 0%, #9ec7fc 100%);">
+                        ← Back to Calculator
+                    </button>
+                </div>
+
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Created</th>
+                            <th>Last Login</th>
+                            <th>Trips</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <!-- Populated via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Main Application (hidden until authenticated) -->
+        <div id="main-app" class="hidden">
+        <div class="card">
+            <div class="summary">
+                <div class="stat">
+                    <div class="stat-label">Days Used (Last 180 Days)</div>
+                    <div class="stat-value" id="days-used">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Days Remaining</div>
+                    <div class="stat-value" id="days-remaining">90</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total Trips</div>
+                    <div class="stat-value" id="total-trips">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="form-section">
+                    <h2>Add New Trip</h2>
+                    <form id="trip-form">
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <label for="arrival-date">Arrival Date</label>
+                                <input type="date" id="arrival-date" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="departure-date">Departure Date</label>
+                                <input type="date" id="departure-date" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="country">Country</label>
+                                <input type="text" id="country" placeholder="e.g., France" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="city">City</label>
+                                <input type="text" id="city" placeholder="e.g., Paris">
+                            </div>
+                        </div>
+                        <div class="form-button-wrapper">
+                            <button type="submit">Add Trip</button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <div class="country-breakdown" id="country-breakdown" style="display: none;">
+                    <h2>Breakdown by Country</h2>
+                    <div class="country-stats" id="country-stats"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="trips-section">
+                    <h2>Your Trips</h2>
+                    <ul class="trip-list" id="trip-list">
+                        <div class="empty-state">
+                            <p>No trips recorded yet. Add your first trip above!</p>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div> <!-- end main-app -->
+    </div>
+
+    <script>
+        // Authentication Manager
+        class AuthManager {
+            constructor() {
+                this.sessionToken = localStorage.getItem('schengen_session');
+                this.currentUser = null;
+            }
+
+            async checkSession() {
+                if (!this.sessionToken) {
+                    this.showAuth();
+                    return false;
+                }
+
+                try {
+                    const response = await fetch('api.php?action=check_session', {
+                        headers: {
+                            'X-Session-Token': this.sessionToken
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.authenticated) {
+                        this.currentUser = data.user;
+                        this.showApp();
+                        return true;
+                    } else {
+                        this.logout();
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Session check failed:', error);
+                    this.showAuth();
+                    return false;
+                }
+            }
+
+            async login() {
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value;
+
+                if (!username || !password) {
+                    this.showError('Please enter username and password');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('api.php?action=login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.sessionToken = data.session_token;
+                        this.currentUser = data.user;
+                        localStorage.setItem('schengen_session', this.sessionToken);
+                        this.hideError();
+                        this.showApp();
+
+                        // Initialize calculator
+                        if (window.calculator) {
+                            await window.calculator.loadTrips();
+                            window.calculator.render();
+                        }
+                    } else {
+                        this.showError(data.message || 'Login failed');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    this.showError('Login failed. Please try again.');
+                }
+            }
+
+            async register() {
+                const username = document.getElementById('reg-username').value.trim();
+                const password = document.getElementById('reg-password').value;
+                const confirm = document.getElementById('reg-confirm').value;
+
+                if (!username || !password || !confirm) {
+                    this.showError('Please fill in all fields');
+                    return;
+                }
+
+                if (password !== confirm) {
+                    this.showError('Passwords do not match');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('api.php?action=register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.hideError();
+                        this.showLogin();
+                        document.getElementById('login-username').value = username;
+                        this.showError('Account created! Please login.', 'success');
+                    } else {
+                        this.showError(data.message || 'Registration failed');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    this.showError('Registration failed. Please try again.');
+                }
+            }
+
+            logout() {
+                if (this.sessionToken) {
+                    fetch('api.php?action=logout', {
+                        method: 'POST',
+                        headers: {
+                            'X-Session-Token': this.sessionToken
+                        }
+                    }).catch(err => console.error('Logout error:', err));
+                }
+
+                this.sessionToken = null;
+                this.currentUser = null;
+                localStorage.removeItem('schengen_session');
+                this.showAuth();
+            }
+
+            showAuth() {
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('main-app').classList.add('hidden');
+                document.getElementById('admin-page').classList.add('hidden');
+                document.getElementById('user-info').classList.add('hidden');
+                document.getElementById('admin-btn').classList.add('hidden');
+            }
+
+            showApp() {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('user-info').classList.remove('hidden');
+                document.getElementById('current-user').textContent = this.currentUser.username;
+
+                // Show admin button if user is admin
+                if (this.currentUser.is_admin) {
+                    document.getElementById('admin-btn').classList.remove('hidden');
+                } else {
+                    document.getElementById('admin-btn').classList.add('hidden');
+                }
+            }
+
+            showLogin() {
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('register-form').classList.add('hidden');
+                this.hideError();
+            }
+
+            showRegister() {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('register-form').classList.remove('hidden');
+                this.hideError();
+            }
+
+            showError(message, type = 'error') {
+                const errorDiv = document.getElementById('auth-error');
+                errorDiv.textContent = message;
+                errorDiv.classList.remove('hidden');
+                if (type === 'success') {
+                    errorDiv.style.background = 'rgba(76, 175, 80, 0.2)';
+                    errorDiv.style.borderColor = '#4caf50';
+                    errorDiv.style.color = '#4caf50';
+                } else {
+                    errorDiv.style.background = 'rgba(255, 107, 107, 0.2)';
+                    errorDiv.style.borderColor = '#ff6b6b';
+                    errorDiv.style.color = '#ff6b6b';
+                }
+            }
+
+            hideError() {
+                document.getElementById('auth-error').classList.add('hidden');
+            }
+
+            getSessionToken() {
+                return this.sessionToken;
+            }
+        }
+
+        // Admin Management Functions
+        async function loadUsers() {
+            try {
+                const response = await fetch('api.php?action=get_users', {
+                    headers: {
+                        'X-Session-Token': window.auth.getSessionToken()
+                    }
+                });
+
+                if (response.ok) {
+                    const users = await response.json();
+                    renderUsersList(users);
+                } else if (response.status === 403) {
+                    alert('You do not have admin privileges');
+                    showCalculator();
+                } else {
+                    console.error('Failed to load users');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        function renderUsersList(users) {
+            const tbody = document.getElementById('users-list');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+
+                const isCurrentUser = user.id === window.auth.currentUser.id;
+
+                tr.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>
+                        ${user.is_admin ? '<span class="admin-badge">Admin</span>' : '<span class="user-badge">User</span>'}
+                    </td>
+                    <td>${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</td>
+                    <td>${user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Never'}</td>
+                    <td>${user.trip_count}</td>
+                    <td>
+                        <button class="delete-btn"
+                                onclick="deleteUser(${user.id}, '${user.username}', ${user.trip_count})"
+                                ${isCurrentUser ? 'disabled title="Cannot delete your own account"' : ''}>
+                            ${isCurrentUser ? '(You)' : 'Delete'}
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function deleteUser(userId, username, tripCount) {
+            const confirmMessage = `Are you sure you want to delete user "${username}"?\n\nThis will also delete ${tripCount} trip(s) permanently.\n\nThis action cannot be undone.`;
+
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('api.php?action=delete_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Session-Token': window.auth.getSessionToken()
+                    },
+                    body: JSON.stringify({ user_id: userId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    loadUsers(); // Refresh the list
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to delete user'));
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Failed to delete user');
+            }
+        }
+
+        function showAdminPage() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('admin-page').classList.remove('hidden');
+            loadUsers();
+        }
+
+        function showCalculator() {
+            document.getElementById('admin-page').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+        }
+
+        // Schengen Calculator
+        class SchengenCalculator {
+            constructor() {
+                this.trips = [];
+                this.init();
+            }
+
+            async init() {
+                this.setupEventListeners();
+                await this.loadTrips();
+                this.render();
+            }
+
+            setupEventListeners() {
+                document.getElementById('trip-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addTrip();
+                });
+
+                document.getElementById('arrival-date').addEventListener('change', (e) => {
+                    const departureInput = document.getElementById('departure-date');
+                    if (!departureInput.value || new Date(departureInput.value) < new Date(e.target.value)) {
+                        departureInput.value = e.target.value;
+                    }
+                });
+            }
+
+            async loadTrips() {
+                try {
+                    const response = await fetch('api.php?action=get_trips', {
+                        headers: {
+                            'X-Session-Token': window.auth.getSessionToken()
+                        }
+                    });
+                    if (response.ok) {
+                        this.trips = await response.json();
+                    } else if (response.status === 401) {
+                        window.auth.logout();
+                        this.trips = [];
+                    } else {
+                        console.error('Failed to load trips');
+                        this.trips = [];
+                    }
+                } catch (error) {
+                    console.error('Error loading trips:', error);
+                    this.trips = [];
+                }
+            }
+
+            async saveTrips() {
+                try {
+                    const response = await fetch('api.php?action=save_trips', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Session-Token': window.auth.getSessionToken()
+                        },
+                        body: JSON.stringify(this.trips)
+                    });
+                    if (response.status === 401) {
+                        window.auth.logout();
+                    } else if (!response.ok) {
+                        console.error('Failed to save trips');
+                    }
+                } catch (error) {
+                    console.error('Error saving trips:', error);
+                }
+            }
+
+            async addTrip() {
+                const arrivalInput = document.getElementById('arrival-date');
+                const departureInput = document.getElementById('departure-date');
+                const countryInput = document.getElementById('country');
+                const cityInput = document.getElementById('city');
+
+                const arrival = new Date(arrivalInput.value);
+                const departure = new Date(departureInput.value);
+
+                if (departure < arrival) {
+                    alert('Departure date must be after arrival date!');
+                    return;
+                }
+
+                this.trips.push({
+                    id: Date.now(),
+                    arrival: arrivalInput.value,
+                    departure: departureInput.value,
+                    country: countryInput.value,
+                    city: cityInput.value
+                });
+
+                this.trips.sort((a, b) => new Date(b.arrival) - new Date(a.arrival));
+                await this.saveTrips();
+                this.render();
+
+                arrivalInput.value = '';
+                departureInput.value = '';
+                countryInput.value = '';
+                cityInput.value = '';
+            }
+
+            async deleteTrip(id) {
+                this.trips = this.trips.filter(trip => trip.id !== id);
+                await this.saveTrips();
+                this.render();
+            }
+
+            calculateDaysInSchengen(referenceDate = new Date()) {
+                const startOfPeriod = new Date(referenceDate);
+                startOfPeriod.setDate(startOfPeriod.getDate() - 180);
+
+                let totalDays = 0;
+
+                this.trips.forEach(trip => {
+                    const arrival = new Date(trip.arrival);
+                    const departure = new Date(trip.departure);
+
+                    const effectiveStart = arrival > startOfPeriod ? arrival : startOfPeriod;
+                    const effectiveEnd = departure < referenceDate ? departure : referenceDate;
+
+                    if (effectiveEnd >= effectiveStart && departure >= startOfPeriod && arrival <= referenceDate) {
+                        const days = Math.floor((effectiveEnd - effectiveStart) / (1000 * 60 * 60 * 24)) + 1;
+                        totalDays += days;
+                    }
+                });
+
+                return totalDays;
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            calculateTripDuration(arrival, departure) {
+                const arrivalDate = new Date(arrival);
+                const departureDate = new Date(departure);
+                return Math.floor((departureDate - arrivalDate) / (1000 * 60 * 60 * 24)) + 1;
+            }
+
+            normalizeCountryName(country) {
+                const normalizations = {
+                    'czechia': 'Czech Republic',
+                    'czech republic': 'Czech Republic',
+                    'holland': 'Netherlands',
+                    'the netherlands': 'Netherlands'
+                };
+                const lower = country.toLowerCase().trim();
+                return normalizations[lower] || country;
+            }
+
+            getCountryFlag(countryName) {
+                const countryToCode = {
+                    'Austria': 'AT', 'Belgium': 'BE', 'Croatia': 'HR', 'Czech Republic': 'CZ',
+                    'Denmark': 'DK', 'Estonia': 'EE', 'Finland': 'FI', 'France': 'FR',
+                    'Germany': 'DE', 'Greece': 'GR', 'Hungary': 'HU', 'Iceland': 'IS',
+                    'Italy': 'IT', 'Latvia': 'LV', 'Liechtenstein': 'LI', 'Lithuania': 'LT',
+                    'Luxembourg': 'LU', 'Malta': 'MT', 'Netherlands': 'NL', 'Norway': 'NO',
+                    'Poland': 'PL', 'Portugal': 'PT', 'Slovakia': 'SK', 'Slovenia': 'SI',
+                    'Spain': 'ES', 'Sweden': 'SE', 'Switzerland': 'CH'
+                };
+
+                const normalized = this.normalizeCountryName(countryName);
+                const code = countryToCode[normalized];
+
+                if (!code) return '';
+
+                const codePoints = code.split('').map(char => 127397 + char.charCodeAt(0));
+                return String.fromCodePoint(...codePoints);
+            }
+
+            getCountryBreakdown() {
+                const breakdown = {};
+                const referenceDate = new Date();
+                const startOfPeriod = new Date(referenceDate);
+                startOfPeriod.setDate(startOfPeriod.getDate() - 180);
+
+                this.trips.forEach(trip => {
+                    const country = trip.country ? this.normalizeCountryName(trip.country) : 'Unknown';
+
+                    if (!breakdown[country]) {
+                        breakdown[country] = {
+                            totalDays: 0,
+                            daysInPeriod: 0,
+                            tripCount: 0,
+                            trips: []
+                        };
+                    }
+
+                    const totalDays = this.calculateTripDuration(trip.arrival, trip.departure);
+                    breakdown[country].totalDays += totalDays;
+                    breakdown[country].tripCount += 1;
+                    breakdown[country].trips.push(trip);
+
+                    const arrival = new Date(trip.arrival);
+                    const departure = new Date(trip.departure);
+                    const effectiveStart = arrival > startOfPeriod ? arrival : startOfPeriod;
+                    const effectiveEnd = departure < referenceDate ? departure : referenceDate;
+
+                    if (effectiveEnd >= effectiveStart && departure >= startOfPeriod && arrival <= referenceDate) {
+                        const daysInPeriod = Math.floor((effectiveEnd - effectiveStart) / (1000 * 60 * 60 * 24)) + 1;
+                        breakdown[country].daysInPeriod += daysInPeriod;
+                    }
+                });
+
+                return breakdown;
+            }
+
+            render() {
+                const daysUsed = this.calculateDaysInSchengen();
+                const daysRemaining = 90 - daysUsed;
+
+                document.getElementById('days-used').textContent = daysUsed;
+                document.getElementById('days-remaining').textContent = daysRemaining;
+                document.getElementById('total-trips').textContent = this.trips.length;
+
+                const daysRemainingElement = document.getElementById('days-remaining').parentElement;
+                daysRemainingElement.classList.remove('warning', 'success');
+                if (daysRemaining <= 10) {
+                    daysRemainingElement.classList.add('warning');
+                } else {
+                    daysRemainingElement.classList.add('success');
+                }
+
+                this.renderTripList();
+                this.renderCountryBreakdown();
+            }
+
+            renderTripList() {
+                const tripList = document.getElementById('trip-list');
+
+                if (this.trips.length === 0) {
+                    tripList.innerHTML = '<div class="empty-state"><p>No trips recorded yet. Add your first trip above!</p></div>';
+                    return;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const upcomingTrips = this.trips.filter(trip => new Date(trip.departure) >= today);
+                const completedTrips = this.trips.filter(trip => new Date(trip.departure) < today);
+
+                const renderTrips = (trips, isUpcoming = false) => trips.map(trip => {
+                    const duration = this.calculateTripDuration(trip.arrival, trip.departure);
+                    const flag = trip.country ? this.getCountryFlag(trip.country) : '';
+                    const location = trip.city
+                        ? `${trip.city}, ${trip.country || 'Unknown'}`
+                        : (trip.country || 'Unknown');
+                    const upcomingClass = isUpcoming ? ' upcoming' : '';
+                    return `
+                        <li class="trip-item${upcomingClass}">
+                            <div class="trip-info">
+                                <div class="trip-dates">
+                                    ${this.formatDate(trip.arrival)} → ${this.formatDate(trip.departure)}
+                                </div>
+                                <div class="trip-country">${flag} ${location}</div>
+                                <div class="trip-duration">${duration} day${duration !== 1 ? 's' : ''}</div>
+                            </div>
+                            <button class="delete-btn" onclick="calculator.deleteTrip(${trip.id})">Delete</button>
+                        </li>
+                    `;
+                }).join('');
+
+                let html = '';
+
+                if (upcomingTrips.length > 0) {
+                    html += `
+                        <h3 style="color: #9ec7fc; margin-bottom: 10px; font-size: 1.1rem;">Upcoming Trips</h3>
+                        <ul class="trip-list" style="margin-bottom: 30px;">
+                            ${renderTrips(upcomingTrips, true)}
+                        </ul>
+                    `;
+                }
+
+                if (completedTrips.length > 0) {
+                    html += `
+                        <h3 style="color: #9ec7fc; margin-bottom: 10px; font-size: 1.1rem;">Completed Trips</h3>
+                        <ul class="trip-list">
+                            ${renderTrips(completedTrips, false)}
+                        </ul>
+                    `;
+                }
+
+                tripList.innerHTML = html;
+            }
+
+            renderCountryBreakdown() {
+                const breakdownSection = document.getElementById('country-breakdown');
+                const statsContainer = document.getElementById('country-stats');
+
+                if (this.trips.length === 0) {
+                    breakdownSection.style.display = 'none';
+                    return;
+                }
+
+                breakdownSection.style.display = 'block';
+                const breakdown = this.getCountryBreakdown();
+                const countries = Object.keys(breakdown).sort((a, b) =>
+                    breakdown[b].daysInPeriod - breakdown[a].daysInPeriod
+                );
+
+                statsContainer.innerHTML = countries.map(country => {
+                    const stats = breakdown[country];
+                    const flag = this.getCountryFlag(country);
+                    return `
+                        <div class="country-card">
+                            <div class="country-name">${flag} ${country}</div>
+                            <div class="country-detail">Days in last 180: <strong>${stats.daysInPeriod}</strong></div>
+                            <div class="country-detail">Total days: <strong>${stats.totalDays}</strong></div>
+                            <div class="country-detail">Trips: <strong>${stats.tripCount}</strong></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+        }
+
+        // Initialize application
+        const auth = new AuthManager();
+        const calculator = new SchengenCalculator();
+
+        // Make globally accessible
+        window.auth = auth;
+        window.calculator = calculator;
+
+        // Check session and initialize
+        (async () => {
+            const isAuthenticated = await auth.checkSession();
+            if (isAuthenticated) {
+                await calculator.loadTrips();
+                calculator.render();
+            }
+        })();
+
+        // Allow Enter key for login/register
+        document.getElementById('login-password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') auth.login();
+        });
+        document.getElementById('reg-confirm').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') auth.register();
+        });
+    </script>
+</body>
+</html>
